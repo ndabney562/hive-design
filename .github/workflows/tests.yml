@@ -1,0 +1,18 @@
+name: tests
+# Public repo: Actions minutes are free here, macOS included (agent-rules rule 8 limits private repos only).
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  swift:
+    runs-on: macos-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: swift --version
+      - run: swift test
