@@ -9,7 +9,7 @@ The Hive apps' shared look as a Swift package (Noah, 2026-11-04: "standardize th
 
 ## Milestones
 - [x] Package with tokens, fonts, cards, buttons, icons, hexagon and the ☰ menu shell; tests pass
-- [ ] Public repo with CI and tag 1.0.0
-- [ ] HiveScore uses the package (its own copies removed)
-- [ ] HiveMind uses the package (its own copies removed; its app.css drift test kept)
-- [ ] Both apps' screenshots match the ones before the switch
+- [x] Public repo with CI and tag 1.0.0
+- [x] HiveScore uses the package (its own copies removed)
+- [x] HiveMind uses the package (its own copies removed; its app.css drift test kept)
+- [x] Both apps' screenshots match the ones before the switch
