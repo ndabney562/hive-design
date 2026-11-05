@@ -24,27 +24,42 @@ public extension LinearGradient {
 }
 
 /// The dashboard's sizes, scaled with Dynamic Type.
+/// Two faces (Noah, 2026-11-04: "Rounded display"): SF Pro Rounded, bold, for names, headings and numbers;
+/// SF Pro for reading text. Every size follows the reader's text size.
 public enum HMFont {
     public static func body() -> Font { .system(size: 15, relativeTo: .body) }
     /// Fields and the composer: 16 pt at phone width.
     public static func field() -> Font { .system(size: 16, relativeTo: .body) }
-    public static func heading() -> Font { .system(size: 24, weight: .semibold, relativeTo: .title2) }
+    public static func heading() -> Font { .system(size: 22, weight: .bold, design: .rounded, relativeTo: .title2) }
     public static func meta() -> Font { .system(size: 13, relativeTo: .footnote) }
-    public static func brand() -> Font { .system(size: 17, weight: .semibold, relativeTo: .headline) }
+    public static func brand() -> Font { .system(size: 17, weight: .bold, design: .rounded, relativeTo: .headline) }
     /// The menu's app name.
-    public static func menuBrand() -> Font { .system(size: 24, weight: .semibold, relativeTo: .title2) }
+    public static func menuBrand() -> Font { .system(size: 24, weight: .bold, design: .rounded, relativeTo: .title2) }
     /// A page's big title and an empty screen's greeting.
-    public static func greeting() -> Font { .system(size: 28, weight: .semibold, relativeTo: .title1) }
-    public static func menuRow() -> Font { .system(size: 16, relativeTo: .body) }
-    public static func pill() -> Font { .system(size: 13, relativeTo: .footnote) }
+    public static func greeting() -> Font { .system(size: 28, weight: .bold, design: .rounded, relativeTo: .title1) }
+    public static func menuRow() -> Font { .system(size: 16, weight: .medium, relativeTo: .body) }
+    public static func pill() -> Font { .system(size: 13, weight: .medium, relativeTo: .footnote) }
     public static func small() -> Font { .system(size: 12, relativeTo: .caption1) }
     public static func strong() -> Font { .system(size: 15, weight: .semibold, relativeTo: .body) }
+    /// Card and section titles, in capitals with 0.6 pt tracking (HMCardTitle).
+    public static func label() -> Font { .system(size: 11, weight: .semibold, relativeTo: .caption2) }
+    /// A big number (a score, a count): rounded, bold, digits all one width.
+    public static func number(_ size: CGFloat) -> Font {
+        .system(size: size, weight: .bold, design: .rounded, relativeTo: .largeTitle).monospacedDigit()
+    }
+    /// Fixed-size faces for widgets, which have no room to grow with the text size.
+    public static func fixed(_ size: CGFloat, _ weight: Font.Weight = .regular, rounded: Bool = false) -> Font {
+        .system(size: size, weight: weight, design: rounded ? .rounded : .default)
+    }
 }
 
 private extension Font {
-    /// SF Pro at the dashboard's size, scaled by the reader's text size like `style`.
-    static func system(size: CGFloat, weight: UIFont.Weight = .regular, relativeTo style: UIFont.TextStyle) -> Font {
-        Font(UIFontMetrics(forTextStyle: style).scaledFont(for: .systemFont(ofSize: size, weight: weight)))
+    /// SF Pro (or SF Pro Rounded) at the dashboard's size, scaled by the reader's text size like `style`.
+    static func system(size: CGFloat, weight: UIFont.Weight = .regular, design: UIFontDescriptor.SystemDesign = .default,
+                       relativeTo style: UIFont.TextStyle) -> Font {
+        var font = UIFont.systemFont(ofSize: size, weight: weight)
+        if let d = font.fontDescriptor.withDesign(design) { font = UIFont(descriptor: d, size: size) }
+        return Font(UIFontMetrics(forTextStyle: style).scaledFont(for: font))
     }
 }
 
@@ -93,7 +108,7 @@ public struct HMCardTitle: View {
     public init(_ title: String) { self.title = title }
 
     public var body: some View {
-        Text(title.uppercased()).font(HMFont.small().weight(.semibold)).tracking(0.4).foregroundStyle(Color.hm(.muted))
+        Text(title.uppercased()).font(HMFont.label()).tracking(0.6).foregroundStyle(Color.hm(.muted))
             .accessibilityLabel(title)
             .accessibilityAddTraits(.isHeader)
     }
