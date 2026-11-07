@@ -13,3 +13,5 @@ The Hive apps' shared look as a Swift package (Noah, 2026-11-04: "standardize th
 - [x] HiveScore uses the package (its own copies removed)
 - [x] HiveMind uses the package (its own copies removed; its app.css drift test kept)
 - [x] Both apps' screenshots match the ones before the switch
+- [x] 1.3.0: design review roles, colours and components (text roles, secondary button, chip, status, slide to confirm)
+- [ ] Every Hive app on the 1.3.0 look (HiveRounds, HiveScore with the Optimize slider, HiveTempo, HiveMind), screenshots before and after
