@@ -62,3 +62,57 @@ struct IconTests {
         #expect(sets == Set(IconNames.all.map { "i-\($0).imageset" }))
     }
 }
+
+struct TextRoleTests {
+    /// The design review's scale: nine roles, a 17 pt reading baseline, nothing under 13 pt, no two roles alike.
+    @Test func nineDistinctRolesFromThirteenUp() {
+        #expect(HMTextRole.allCases.count == 9)
+        #expect(HMTextRole.body.spec.size == 17)
+        #expect(HMTextRole.allCases.allSatisfy { $0.spec.size >= 13 && $0.spec.lineHeight > $0.spec.size })
+        let shapes = HMTextRole.allCases.map { "\($0.spec.size)-\($0.spec.weight)-\($0.spec.rounded)-\($0.spec.color)" }
+        #expect(Set(shapes).count == shapes.count)
+    }
+
+    /// Rounded only for the brand, the page title and the hero number.
+    @Test func roundedOnlyForDisplay() {
+        #expect(Set(HMTextRole.allCases.filter { $0.spec.rounded }) == [.page, .brand, .metric])
+    }
+}
+
+struct ContrastTests {
+    static func luminance(_ hex: UInt32) -> Double {
+        func ch(_ v: UInt32) -> Double { let c = Double(v) / 255; return c <= 0.03928 ? c / 12.92 : pow((c + 0.055) / 1.055, 2.4) }
+        return 0.2126 * ch(hex >> 16 & 0xFF) + 0.7152 * ch(hex >> 8 & 0xFF) + 0.0722 * ch(hex & 0xFF)
+    }
+    static func ratio(_ a: UInt32, _ b: UInt32) -> Double {
+        let (x, y) = (luminance(a), luminance(b))
+        return (max(x, y) + 0.05) / (min(x, y) + 0.05)
+    }
+
+    /// Every text colour is at least 4.5:1 on bg, panel and raise; the control outline (edge) at least 3:1.
+    @Test(arguments: [ThemeTokens.light, ThemeTokens.dark])
+    func textAndOutlinesPass(_ t: [ThemeToken: UInt32]) {
+        for surface in [ThemeToken.bg, .panel, .raise] {
+            for text in [ThemeToken.ink, .muted, .faint, .accent, .good, .bad, .warn] {
+                #expect(Self.ratio(t[text]!, t[surface]!) >= 4.5, "\(text) on \(surface)")
+            }
+            #expect(Self.ratio(t[.edge]!, t[surface]!) >= 3, "edge on \(surface)")
+        }
+        #expect(Self.ratio(t[.onGrad]!, t[.gradA]!) >= 4.5 && Self.ratio(t[.onGrad]!, t[.gradB]!) >= 4.5)
+    }
+}
+
+struct SlideToConfirmTests {
+    @Test func runLeavesRoomForTheThumb() {
+        #expect(SlideToConfirm.run(trackWidth: 362, thumb: 48, inset: 4) == 306)
+        #expect(SlideToConfirm.run(trackWidth: 40, thumb: 48, inset: 4) == 0)
+    }
+
+    @Test func firesOnlyNearTheEnd() {
+        #expect(SlideToConfirm.progress(translation: -20, run: 300) == 0)
+        #expect(SlideToConfirm.progress(translation: 900, run: 300) == 1)
+        #expect(SlideToConfirm.progress(translation: 10, run: 0) == 0)
+        #expect(!SlideToConfirm.fires(progress: SlideToConfirm.progress(translation: 240, run: 300)))
+        #expect(SlideToConfirm.fires(progress: SlideToConfirm.progress(translation: 260, run: 300)))
+    }
+}
