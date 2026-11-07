@@ -202,10 +202,11 @@ public struct HMSlideToConfirm: View {
                         .opacity(1 - min(1, progress * 1.6))
                     }
                 }
+                .environment(\.layoutDirection, direction)  // the words read in their own direction
                 .lineLimit(1)
+                // padding in the slider's physical left-to-right space: room for the thumb on the side it starts
                 .padding(rtl ? .trailing : .leading, thumb + 2 * inset + 8).padding(rtl ? .leading : .trailing, 16)
                 .frame(maxWidth: .infinity)
-                .environment(\.layoutDirection, direction)
                 Circle().fill(isEnabled ? AnyShapeStyle(LinearGradient.hmAction) : AnyShapeStyle(Color.hm(.edge)))
                     .frame(width: thumb, height: thumb)
                     .overlay(Image(systemName: rtl ? "chevron.left.2" : "chevron.right.2").font(.system(size: thumb * 0.36, weight: .bold))
