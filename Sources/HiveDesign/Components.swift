@@ -144,6 +144,7 @@ public struct HMSlideToConfirm: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.dynamicTypeSize) private var typeSize
     @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.layoutDirection) private var direction
 
     /// `title` e.g. "Slide to optimize"; `value` e.g. "+0.8"; `workingTitle` shows with a spinner while `isWorking`.
     public init(_ title: String, value: String? = nil, workingTitle: String = "Working…", isWorking: Bool = false,
@@ -176,12 +177,15 @@ public struct HMSlideToConfirm: View {
         }
     }
 
+    /// Laid out left-to-right on purpose, then mirrored by hand for right-to-left languages: the thumb starts at the
+    /// reading start and slides toward the reading end.
     private var slider: some View {
-        GeometryReader { geo in
+        let rtl = direction == .rightToLeft
+        return GeometryReader { geo in
             let thumb = height - 2 * inset
             let run = SlideToConfirm.run(trackWidth: geo.size.width, thumb: thumb, inset: inset)
             let progress = SlideToConfirm.progress(translation: drag, run: run)
-            ZStack(alignment: .leading) {
+            ZStack(alignment: rtl ? .trailing : .leading) {
                 Capsule().fill(Color.hm(.raise))
                 Capsule().fill(LinearGradient.hmAction)
                     .frame(width: thumb + 2 * inset + drag)
@@ -199,16 +203,17 @@ public struct HMSlideToConfirm: View {
                     }
                 }
                 .lineLimit(1)
-                .padding(.leading, thumb + 2 * inset + 8).padding(.trailing, 16)
+                .padding(rtl ? .trailing : .leading, thumb + 2 * inset + 8).padding(rtl ? .leading : .trailing, 16)
                 .frame(maxWidth: .infinity)
+                .environment(\.layoutDirection, direction)
                 Circle().fill(isEnabled ? AnyShapeStyle(LinearGradient.hmAction) : AnyShapeStyle(Color.hm(.edge)))
                     .frame(width: thumb, height: thumb)
-                    .overlay(Image(systemName: "chevron.right.2").font(.system(size: thumb * 0.36, weight: .bold))
+                    .overlay(Image(systemName: rtl ? "chevron.left.2" : "chevron.right.2").font(.system(size: thumb * 0.36, weight: .bold))
                         .foregroundStyle(Color.hm(.onGrad)))
-                    .offset(x: inset + drag)
+                    .offset(x: rtl ? -(inset + drag) : inset + drag)
                     .opacity(isWorking ? 0 : 1)
                     .gesture(DragGesture(minimumDistance: 0)
-                        .onChanged { g in drag = min(run, max(0, g.translation.width)) }
+                        .onChanged { g in drag = min(run, max(0, rtl ? -g.translation.width : g.translation.width)) }
                         .onEnded { _ in
                             if SlideToConfirm.fires(progress: SlideToConfirm.progress(translation: drag, run: run)) {
                                 drag = run
@@ -222,6 +227,7 @@ public struct HMSlideToConfirm: View {
                     .allowsHitTesting(isEnabled && !isWorking)
             }
         }
+        .environment(\.layoutDirection, .leftToRight)
         .frame(height: height)
         .contentShape(Capsule())
         .sensoryFeedback(.success, trigger: fired)
