@@ -39,13 +39,13 @@ public enum HMType {
 /// Font, colour and line spacing for one text role, scaled with the reader's text size. Never shrinks text to fit.
 struct HMTextModifier: ViewModifier {
     let role: HMTextRole
-    let color: ThemeToken
+    let color: Color
     @ScaledMetric private var size: CGFloat
     @ScaledMetric private var interval: CGFloat
 
-    init(role: HMTextRole, color: ThemeToken?) {
+    init(role: HMTextRole, color: Color) {
         self.role = role
-        self.color = color ?? role.spec.color
+        self.color = color
         _size = ScaledMetric(wrappedValue: role.spec.size, relativeTo: role.spec.style.font)
         _interval = ScaledMetric(wrappedValue: role.spec.lineHeight, relativeTo: role.spec.style.font)
     }
@@ -55,15 +55,21 @@ struct HMTextModifier: ViewModifier {
         if role.spec.rounded, let d = natural.fontDescriptor.withDesign(.rounded) { natural = UIFont(descriptor: d, size: size) }
         return content
             .font(HMType.font(role, size: size))
-            .foregroundStyle(Color.hm(color))
+            .foregroundStyle(color)
             .lineSpacing(max(0, interval - natural.lineHeight))
     }
 }
 
 public extension View {
     /// Style text as one of the nine roles; `color` overrides the role's colour token.
+    /// Give the colour here, not in a `.foregroundStyle` after it: the role's colour sits closer to the text and wins.
     func hmText(_ role: HMTextRole, color: ThemeToken? = nil) -> some View {
-        modifier(HMTextModifier(role: role, color: color))
+        modifier(HMTextModifier(role: role, color: Color.hm(color ?? role.spec.color)))
+    }
+
+    /// The same, with any colour (one worked out at run time, such as pass or fail).
+    func hmText(_ role: HMTextRole, tint: Color) -> some View {
+        modifier(HMTextModifier(role: role, color: tint))
     }
 }
 
