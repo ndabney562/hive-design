@@ -2,6 +2,7 @@
 
 The Hive apps' shared look as a Swift package (Noah, 2026-11-04: "standardize the aesthetics of the Hive apps"; chose a public repo, with HiveMind's `integrations/ui/app.css` as the one colour source).
 
+- **Hive family:** one connected system with the other Hive apps (global rule "Hive family" in `~/agent-rules/AGENTS.md`).
 - **Repo URL:** https://github.com/ndabney562/hive-design (public)
 - **Branch:** main
 - **Test command:** `swift test && xcodebuild -scheme HiveDesign -destination 'generic/platform=iOS Simulator' build` (from the repo root)
@@ -14,4 +15,4 @@ The Hive apps' shared look as a Swift package (Noah, 2026-11-04: "standardize th
 - [x] HiveMind uses the package (its own copies removed; its app.css drift test kept)
 - [x] Both apps' screenshots match the ones before the switch
 - [x] 1.3.0: design review roles, colours and components (text roles, secondary button, chip, status, slide to confirm)
-- [ ] Every Hive app on the 1.3.0 look (HiveRounds, HiveScore with the Optimize slider, HiveTempo, HiveMind), screenshots before and after
+- [x] Every Hive app on the 1.3.0 look (HiveRounds, HiveScore with the Optimize slider, HiveTempo, HiveMind), screenshots before and after
