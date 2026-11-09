@@ -124,5 +124,7 @@ struct HiveAppLinkTests {
         #expect(l.accessibilityHint == "Opens HiveScore")
         #expect(l.shown(missing: false) == "99 · Good")
         #expect(l.shown(missing: true) == "Not on this iPhone")
+        // HiveMind's phone has no feed access yet: the row is just the name.
+        #expect(HiveAppLink(name: "HiveTempo", status: "", url: URL(string: "hivetempo://")!).accessibilityLabel == "HiveTempo")
     }
 }

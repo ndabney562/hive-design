@@ -18,7 +18,9 @@ public struct HiveAppLink: Identifiable, Equatable, Sendable {
     }
 
     /// VoiceOver reads the separator as a pause, not a word.
-    public var accessibilityLabel: String { "\(name), " + status.replacingOccurrences(of: " · ", with: ", ") }
+    public var accessibilityLabel: String {
+        status.isEmpty ? name : "\(name), " + status.replacingOccurrences(of: " · ", with: ", ")
+    }
     public var accessibilityHint: String { "Opens \(name)" }
 
     /// After a tap found the app missing, the row says so instead of its status.
@@ -49,8 +51,10 @@ public struct HiveAppsSection: View {
                             HiveAppMark(nil, size: 20)
                             VStack(alignment: .leading, spacing: 1) {
                                 Text(link.name).font(HMFont.menuRow()).foregroundStyle(Color.hm(.ink))
-                                Text(link.shown(missing: missing.contains(link.name)))
-                                    .font(HMFont.small()).foregroundStyle(Color.hm(.muted)).lineLimit(2)
+                                let shown = link.shown(missing: missing.contains(link.name))
+                                if !shown.isEmpty {
+                                    Text(shown).font(HMFont.small()).foregroundStyle(Color.hm(.muted)).lineLimit(2)
+                                }
                             }
                         }
                         .padding(.horizontal, 10).padding(.vertical, 6)
