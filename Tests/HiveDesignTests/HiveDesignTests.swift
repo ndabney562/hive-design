@@ -116,3 +116,15 @@ struct SlideToConfirmTests {
         #expect(SlideToConfirm.fires(progress: SlideToConfirm.progress(translation: 260, run: 300)))
     }
 }
+
+struct HiveAppLinkTests {
+    @Test func readsNameStatusAndWhatATapDoes() {
+        let l = HiveAppLink(name: "HiveScore", status: "99 · Good", url: URL(string: "hivescore://")!)
+        #expect(l.accessibilityLabel == "HiveScore, 99, Good")
+        #expect(l.accessibilityHint == "Opens HiveScore")
+        #expect(l.shown(missing: false) == "99 · Good")
+        #expect(l.shown(missing: true) == "Not on this iPhone")
+        // HiveMind's phone has no feed access yet: the row is just the name.
+        #expect(HiveAppLink(name: "HiveTempo", status: "", url: URL(string: "hivetempo://")!).accessibilityLabel == "HiveTempo")
+    }
+}
