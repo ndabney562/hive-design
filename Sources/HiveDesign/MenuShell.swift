@@ -62,7 +62,10 @@ public struct HiveMenuRow: View {
 
     public var body: some View {
         Button(action: action) {
-            HStack(spacing: 14) { HMIcon(icon, size: 20); Text(title).font(HMFont.menuRow()) }
+            HStack(spacing: 14) {
+                HMIcon(icon, size: 20)
+                Text(title).font(HMFont.menuRow()).lineLimit(2).minimumScaleFactor(0.8)
+            }
                 .foregroundStyle(Color.hm(.ink))
                 .padding(.horizontal, 10).frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
                 .contentShape(Rectangle())
