@@ -22,6 +22,7 @@ public struct HiveSideMenu<Rows: View, Footer: View>: View {
             HStack(spacing: 10) {
                 HiveAppMark(mark, size: 30)
                 Text(name).font(HMFont.menuBrand()).tracking(-0.4).foregroundStyle(Color.hm(.ink))
+                    .lineLimit(1).minimumScaleFactor(0.6)
             }
             .padding(.horizontal, 18).padding(.top, 14).padding(.bottom, 16)
             .accessibilityElement(children: .combine)
@@ -35,6 +36,9 @@ public struct HiveSideMenu<Rows: View, Footer: View>: View {
             footer
         }
         .background(Color.hm(.side).ignoresSafeArea())
+        // The menu is at most 272 pt wide: its type stops growing at the largest standard size, as a sidebar does,
+        // so the largest accessibility sizes never break a name mid-word ("HiveRo|unds"). VoiceOver reads it in full.
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }
 }
 
