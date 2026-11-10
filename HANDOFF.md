@@ -6,5 +6,6 @@
 - **In progress:** nothing.
 - **Next step (exact):** none open. All four apps are on the 1.3 look (done 2026-11-07: HiveRounds, HiveScore with the Optimize slider, HiveTempo, HiveMind PR #312; screenshots in each repo's `docs/screens/design-review-*.png`). HiveMind resolves 1.3.1; HiveRounds is on 1.5.0 (PR 26 merged 2026-11-10); HiveScore and HiveTempo resolve 1.3.0 and move up with their next change.
 - **Blockers:** none.
-- **Last test result:** `swift test` 10/10 passed; iOS simulator build succeeded (2026-11-10).
-- **Model + timestamp:** Claude Code (Opus 5.5), 2026-11-10.
+- **Last test result:** `swift test` 10/10 passed; iOS simulator build succeeded (2026-11-10). Not re-run in this session.
+- **Last commit hash:** a561e2b0fde736626c9bb29c6e6d47739680adc9 (HANDOFF: refresh stale next step, #11).
+- **Model + timestamp:** Claude Code (Haiku 5.5), 2026-11-10.
