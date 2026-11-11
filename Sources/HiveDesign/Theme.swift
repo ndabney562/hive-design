@@ -214,6 +214,21 @@ public struct SecondaryButtonStyle: ButtonStyle {
     }
 }
 
+/// A whole card or list row that opens something: it dims and shrinks a little while held, and gives a light tap
+/// on the iPhone, so every press visibly lands (Noah, HiveTempo 2026-11-11). Put it on a Button around the row.
+public struct HMPressStyle: ButtonStyle {
+    public init() {}
+
+    public func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .contentShape(Rectangle())
+            .scaleEffect(configuration.isPressed ? 0.97 : 1)
+            .opacity(configuration.isPressed ? 0.75 : 1)
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
+            .sensoryFeedback(.impact(weight: .light), trigger: configuration.isPressed) { _, pressed in pressed }
+    }
+}
+
 /// Older plain-text button. New code uses `SecondaryButtonStyle`, which looks tappable.
 @available(*, deprecated, message: "Use SecondaryButtonStyle: actions must look tappable.")
 public struct GhostButtonStyle: ButtonStyle {
