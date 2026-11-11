@@ -122,13 +122,20 @@ struct HiveWhatsNewView: View {
     }
 }
 
+/// The cards one launch shows. The sheet is presented with `item:` so its cards come with it: with
+/// `isPresented:` plus separate state, the sheet sometimes drew before the cards were set and opened empty.
+struct GuideLaunchSheet: Identifiable {
+    let id = UUID()
+    let cards: [GuideCard]
+    let isWelcome: Bool
+}
+
 struct HiveGuideLaunch: ViewModifier {
     let guide: Guide?
     let options: HiveGuideOptions
     let defaults: UserDefaults
     @State private var ran = false
-    @State private var shown: (cards: [GuideCard], isWelcome: Bool) = ([], false)
-    @State private var open = false
+    @State private var sheet: GuideLaunchSheet?
 
     func body(content: Content) -> some View {
         content
@@ -136,11 +143,11 @@ struct HiveGuideLaunch: ViewModifier {
                 guard !ran else { return }
                 ran = true
                 let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? ""
-                shown = GuideLaunch.take(guide: guide, build: build, defaults: defaults, welcome: options.welcome)
-                open = !shown.cards.isEmpty
+                let shown = GuideLaunch.take(guide: guide, build: build, defaults: defaults, welcome: options.welcome)
+                if !shown.cards.isEmpty { sheet = GuideLaunchSheet(cards: shown.cards, isWelcome: shown.isWelcome) }
             }
-            .sheet(isPresented: $open) {
-                HiveWhatsNewView(title: shown.isWelcome ? "Welcome" : "What's new", cards: shown.cards)
+            .sheet(item: $sheet) { s in
+                HiveWhatsNewView(title: s.isWelcome ? "Welcome" : "What's new", cards: s.cards)
             }
     }
 }
