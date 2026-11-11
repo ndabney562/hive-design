@@ -10,6 +10,8 @@ The shared look of the Hive apps (HiveMind, HiveScore, HiveTempo, HiveRounds) as
 
 Xcode › File › Add Package Dependencies… › `https://github.com/ndabney562/hive-design` › Up to Next Major from `1.0.0`, then `import HiveDesign`.
 
+"How to use" guide (1.7.0, data from hive-kit 1.8.0): put `Guide.json` in the app target and the ☰ menu shows "How to use" as its top row by itself (`HiveSideMenu(guide:)` defaults to `Guide.main`). Add `.hiveGuideOnLaunch()` to the root view for a one-time "What's new" after an update; apps for other people pass `options: .init(welcome: true)` for a 3-card welcome on first launch. UI tests: `guideRow`, the sheet's search field, `guideCard-<id>`, `guideDone`, `whatsNewDone`; launch with `-hive.guide.lastBuild 20261101.0000` to see What's new.
+
 ## Change the look
 
 1. Change the colour in HiveMind's `integrations/ui/app.css` first, then copy it into `Sources/HiveDesign/ThemeTokens.swift`.

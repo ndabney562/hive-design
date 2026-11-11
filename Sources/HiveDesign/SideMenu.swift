@@ -1,18 +1,24 @@
 #if canImport(UIKit)
+import HiveKit
 import SwiftUI
 
 /// The ☰ menu every Hive app shows inside `HiveMenuShell` (Noah, 2026-11-07: one Hive framework): the app's mark and
 /// name at the top, its pages as `HiveMenuRow`s, and an optional footer such as `HiveMenuFooter`.
 /// HiveMind, HiveScore and HiveTempo each wrote this layout by hand before.
+/// With a guide (by default the app's bundled `Guide.json`), "How to use" is the top row and opens it in a sheet.
 public struct HiveSideMenu<Rows: View, Footer: View>: View {
     let name: String
     let mark: Image?
+    let guide: Guide?
     let rows: Rows
     let footer: Footer
+    @State private var showGuide = false
 
-    public init(name: String, mark: Image? = nil, @ViewBuilder rows: () -> Rows, @ViewBuilder footer: () -> Footer) {
+    public init(name: String, mark: Image? = nil, guide: Guide? = .main, @ViewBuilder rows: () -> Rows,
+                @ViewBuilder footer: () -> Footer) {
         self.name = name
         self.mark = mark
+        self.guide = guide
         self.rows = rows()
         self.footer = footer()
     }
@@ -29,7 +35,13 @@ public struct HiveSideMenu<Rows: View, Footer: View>: View {
             .accessibilityAddTraits(.isHeader)
 
             ScrollView {
-                VStack(alignment: .leading, spacing: 2) { rows }
+                VStack(alignment: .leading, spacing: 2) {
+                    if guide != nil {
+                        HiveMenuRow("How to use", icon: "info") { showGuide = true }
+                            .accessibilityIdentifier("guideRow")
+                    }
+                    rows
+                }
                     .padding(.horizontal, 8)
             }
 
@@ -39,12 +51,15 @@ public struct HiveSideMenu<Rows: View, Footer: View>: View {
         // The menu is at most 272 pt wide: its type stops growing at the largest standard size, as a sidebar does,
         // so the largest accessibility sizes never break a name mid-word ("HiveRo|unds"). VoiceOver reads it in full.
         .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+        .sheet(isPresented: $showGuide) {
+            if let guide { HiveGuideView(guide: guide) }
+        }
     }
 }
 
 extension HiveSideMenu where Footer == EmptyView {
-    public init(name: String, mark: Image? = nil, @ViewBuilder rows: () -> Rows) {
-        self.init(name: name, mark: mark, rows: rows) { EmptyView() }
+    public init(name: String, mark: Image? = nil, guide: Guide? = .main, @ViewBuilder rows: () -> Rows) {
+        self.init(name: name, mark: mark, guide: guide, rows: rows) { EmptyView() }
     }
 }
 

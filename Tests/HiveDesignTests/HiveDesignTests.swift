@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 import Testing
 @testable import HiveDesign
+import HiveKit
 
 struct ThemeTokensTests {
     @Test func bothSchemesAreComplete() {
@@ -135,6 +136,24 @@ struct PressStyleTests {
     @MainActor @Test func pressStyleWrapsARow() {
         let row = Button {} label: { Text("Next") }.buttonStyle(HMPressStyle())
         _ = row.body
+    }
+}
+#endif
+
+#if canImport(UIKit)
+struct GuideViewsTests {
+    static let sample = Data(#"{"cards":[{"id":"a","title":"How do I add a repo?","steps":["Open the menu","Tap Repos","Tap Add"],"screen":"repos","changed":"20261111.0814","welcome":true}]}"#.utf8)
+
+    /// The ☰ menu takes the app's guide: none means no "How to use" row; older call sites still compile.
+    @MainActor @Test func sideMenuHasGuideParameter() throws {
+        let guide = try #require(Guide.load(Self.sample))
+        _ = HiveSideMenu(name: "X", guide: nil) { EmptyView() }
+        _ = HiveSideMenu(name: "X", guide: guide) { EmptyView() }
+        _ = HiveSideMenu(name: "X") { EmptyView() }
+        _ = HiveGuideView(guide: guide)
+        _ = HiveGuideCardView(card: guide.cards[0])
+        #expect(HiveGuideOptions().welcome == false)
+        #expect(HiveGuideOptions(welcome: true).welcome)
     }
 }
 #endif
