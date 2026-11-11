@@ -128,3 +128,13 @@ struct HiveAppLinkTests {
         #expect(HiveAppLink(name: "HiveTempo", status: "", url: URL(string: "hivetempo://")!).accessibilityLabel == "HiveTempo")
     }
 }
+
+#if canImport(UIKit)
+struct PressStyleTests {
+    /// HMPressStyle is public and builds a row (HiveTempo's Next card and timeline rows use it).
+    @MainActor @Test func pressStyleWrapsARow() {
+        let row = Button {} label: { Text("Next") }.buttonStyle(HMPressStyle())
+        _ = row.body
+    }
+}
+#endif
