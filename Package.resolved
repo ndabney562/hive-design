@@ -1,0 +1,15 @@
+{
+  "originHash" : "724153edaede9e3ee846def734fbfcad59d7f4d19ec269308195a0413000fd25",
+  "pins" : [
+    {
+      "identity" : "hive-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ndabney562/hive-kit",
+      "state" : {
+        "revision" : "d1b1aeaa04bd8740f6387da9cba1fe2cd1186d1a",
+        "version" : "1.8.0"
+      }
+    }
+  ],
+  "version" : 3
+}
