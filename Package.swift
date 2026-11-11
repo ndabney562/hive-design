@@ -9,8 +9,13 @@ let package = Package(
     products: [
         .library(name: "HiveDesign", targets: ["HiveDesign"]),
     ],
+    dependencies: [
+        // The "How to use" guide's data and rules (Guide, GuideLaunch); its views live here.
+        .package(url: "https://github.com/ndabney562/hive-kit", from: "1.8.0"),
+    ],
     targets: [
-        .target(name: "HiveDesign", resources: [.process("Resources/Icons.xcassets")]),
-        .testTarget(name: "HiveDesignTests", dependencies: ["HiveDesign"]),
+        .target(name: "HiveDesign", dependencies: [.product(name: "HiveKit", package: "hive-kit")],
+                resources: [.process("Resources/Icons.xcassets")]),
+        .testTarget(name: "HiveDesignTests", dependencies: ["HiveDesign", .product(name: "HiveKit", package: "hive-kit")]),
     ]
 )
