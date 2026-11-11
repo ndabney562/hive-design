@@ -1,6 +1,6 @@
 # Hive guide ("How to use") design
 
-Date: 2026-11-11. Agreed with Noah in chat (answers 1, 4, 4, then "yes" to the design). Status: approved; next is the implementation plan.
+Date: 2026-11-11. Agreed with Noah in chat (answers 1, 4, 4, then "yes" to the design). Status: approved; plan in docs/superpowers/plans/2026-11-11-hive-guide.md (model and checks moved to hive-kit 1.8.0 so Kit tests run them on Linux).
 
 ## What it is
 
