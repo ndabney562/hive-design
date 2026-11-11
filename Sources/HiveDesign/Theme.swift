@@ -214,18 +214,52 @@ public struct SecondaryButtonStyle: ButtonStyle {
     }
 }
 
-/// A whole card or list row that opens something: it dims and shrinks a little while held, and gives a light tap
-/// on the iPhone, so every press visibly lands (Noah, HiveTempo 2026-11-11). Put it on a Button around the row.
+/// A whole card or list row that opens something. While held, and for a moment after the finger lifts, it gets an
+/// accent-tinted fill and outline and shrinks a little, plus a light haptic, so every press visibly lands (Noah,
+/// HiveTempo 2026-11-11: "I'd like a visual indication", the haptic alone was not enough). Inside a ScrollView iOS
+/// reports the press only as the finger lifts, so the highlight is held for `HMPressStyle.hold` after release; an
+/// action that navigates should wait that long (`HMPressStyle.afterFlash`) so the highlight is seen first.
 public struct HMPressStyle: ButtonStyle {
+    public static let hold: Duration = .milliseconds(220)
+
     public init() {}
 
+    /// Runs `action` once the release highlight has shown (use for taps that open another page).
+    @MainActor public static func afterFlash(_ action: @escaping @MainActor () -> Void) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(140))
+            action()
+        }
+    }
+
     public func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .contentShape(Rectangle())
-            .scaleEffect(configuration.isPressed ? 0.97 : 1)
-            .opacity(configuration.isPressed ? 0.75 : 1)
-            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
-            .sensoryFeedback(.impact(weight: .light), trigger: configuration.isPressed) { _, pressed in pressed }
+        PressBody(configuration: configuration)
+    }
+
+    struct PressBody: View {
+        let configuration: Configuration
+        @State private var lit = false
+
+        var body: some View {
+            let shape = RoundedRectangle(cornerRadius: 12, style: .continuous)
+            configuration.label
+                .contentShape(Rectangle())
+                .background(lit ? Color.hm(.accentSoft) : .clear, in: shape)
+                .overlay(shape.strokeBorder(Color.hm(.accent), lineWidth: 2).opacity(lit ? 1 : 0))
+                .scaleEffect(lit ? 0.96 : 1)
+                .animation(.easeOut(duration: 0.1), value: lit)
+                .sensoryFeedback(.impact(weight: .light), trigger: configuration.isPressed) { _, pressed in pressed }
+                .onChange(of: configuration.isPressed) { _, pressed in
+                    if pressed {
+                        lit = true
+                    } else {
+                        Task { @MainActor in
+                            try? await Task.sleep(for: HMPressStyle.hold)
+                            lit = false
+                        }
+                    }
+                }
+        }
     }
 }
 
