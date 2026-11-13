@@ -5,7 +5,7 @@ The Hive apps' shared look as a Swift package (Noah, 2026-11-04: "standardize th
 - **Hive family:** one connected system with the other Hive apps (global rule "Hive family" in `~/agent-rules/AGENTS.md`).
 - **Repo URL:** https://github.com/ndabney562/hive-design (public)
 - **Branch:** main
-- **Test command:** `swift test && xcodebuild -scheme HiveDesign -destination 'generic/platform=iOS Simulator' build` (from the repo root)
+- **Test command:** `swift test && ~/agent-rules/scripts/heavy-guard hive-design-ui -- xcodebuild -scheme HiveDesign -destination 'generic/platform=iOS Simulator' build` (from the repo root) The xcodebuild part runs through agent-rules `heavy-guard` (one heavy job on the Mac at a time, waits out load spikes, never skips; 2026-11-13).
 - **Stack:** Swift 6 package, SwiftUI and UIKit (iOS 27); tokens and `Hexagon` also build on macOS for `swift test`.
 
 ## Milestones
