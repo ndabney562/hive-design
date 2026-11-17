@@ -17,4 +17,4 @@ The Hive apps' shared look as a Swift package (Noah, 2026-11-04: "standardize th
 - [x] 1.3.0: design review roles, colours and components (text roles, secondary button, chip, status, slide to confirm)
 - [x] Every Hive app on the 1.3.0 look (HiveRounds, HiveScore with the Optimize slider, HiveTempo, HiveMind), screenshots before and after
 - [x] 1.7.0: "How to use" guide views (guide sheet with search, card steps, What's new / welcome sheet, top ☰ row)
-- [ ] Every Hive app ships its How to use cards (HiveScore, HiveTempo, HiveRounds, HiveMind; HiveBeat in its milestone 2)
+- [x] Every Hive app ships its How to use cards (HiveScore, HiveTempo, HiveRounds, HiveMind, HiveBeat, HiveWorld)

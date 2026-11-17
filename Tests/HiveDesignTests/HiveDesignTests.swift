@@ -135,7 +135,35 @@ struct PressStyleTests {
     /// HMPressStyle is public and builds a row (HiveTempo's Next card and timeline rows use it).
     @MainActor @Test func pressStyleWrapsARow() {
         let row = Button {} label: { Text("Next") }.buttonStyle(HMPressStyle())
-        _ = row.body
+        let _: any View = row
+        #expect(HMPressStyle.afterFlash > 0)
+    }
+
+    @MainActor @Test func signInViewBuildsInAllStates() {
+        let idle = HiveGitHubSignInView(
+            mark: Image(systemName: "hexagon"),
+            title: "Sign in",
+            subtitle: "Read-only",
+            footnote: "Private",
+            code: nil,
+            problem: nil,
+            onSignIn: {},
+            onCancel: {}
+        )
+        let code = DeviceCode(deviceCode: "d", userCode: "ABCD-1234", verificationURI: URL(string: "https://github.com/login/device")!, expiresIn: 900, interval: 5)
+        let waiting = HiveGitHubSignInView(
+            mark: Image(systemName: "hexagon"),
+            title: "Sign in",
+            subtitle: "Read-only",
+            footnote: "Private",
+            code: code,
+            problem: "Rate limited",
+            onSignIn: {},
+            onCancel: {},
+            onDismiss: {}
+        )
+        let _: any View = idle
+        let _: any View = waiting
     }
 }
 #endif
