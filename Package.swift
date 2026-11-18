@@ -11,7 +11,7 @@ let package = Package(
     ],
     dependencies: [
         // The "How to use" guide's data and rules (Guide, GuideLaunch); its views live here.
-        .package(url: "https://github.com/ndabney562/hive-kit", from: "1.8.0"),
+        .package(url: "https://github.com/ndabney562/hive-kit", from: "1.23.0"),
     ],
     targets: [
         .target(name: "HiveDesign", dependencies: [.product(name: "HiveKit", package: "hive-kit")],
