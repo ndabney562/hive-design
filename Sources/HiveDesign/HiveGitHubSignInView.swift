@@ -40,7 +40,7 @@ public struct HiveGitHubSignInView: View {
     }
 
     public var body: some View {
-        ScrollView {
+        HMScroll {
             VStack(alignment: .leading, spacing: 18) {
                 HiveAppMark(mark, size: 64)
                 Text(title).hmText(.page)

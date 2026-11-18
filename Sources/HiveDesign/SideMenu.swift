@@ -34,7 +34,7 @@ public struct HiveSideMenu<Rows: View, Footer: View>: View {
             .accessibilityElement(children: .combine)
             .accessibilityAddTraits(.isHeader)
 
-            ScrollView {
+            HMScroll {
                 VStack(alignment: .leading, spacing: 2) {
                     if guide != nil {
                         HiveMenuRow("How to use", icon: "info") { showGuide = true }

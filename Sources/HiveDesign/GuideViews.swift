@@ -52,7 +52,7 @@ public struct HiveGuideCardView: View {
     public init(card: GuideCard) { self.card = card }
 
     public var body: some View {
-        ScrollView {
+        HMScroll {
             VStack(alignment: .leading, spacing: 16) {
                 Text(card.title).hmText(.page).accessibilityAddTraits(.isHeader)
                 HMCard { GuideSteps(steps: card.steps) }
@@ -97,7 +97,7 @@ struct HiveWhatsNewView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
+            HMScroll {
                 VStack(alignment: .leading, spacing: 16) {
                     ForEach(cards) { card in
                         HMCard {
