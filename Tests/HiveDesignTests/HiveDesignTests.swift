@@ -178,6 +178,7 @@ struct GuideViewsTests {
         _ = HiveSideMenu(name: "X", guide: nil) { EmptyView() }
         _ = HiveSideMenu(name: "X", guide: guide) { EmptyView() }
         _ = HiveSideMenu(name: "X") { EmptyView() }
+        _ = HMScroll { Text("page") }  // vertical pages never drift sideways (HiveScore UI test testNoSidewaysScroll)
         _ = HiveGuideView(guide: guide)
         _ = HiveGuideCardView(card: guide.cards[0])
         #expect(HiveGuideOptions().welcome == false)
