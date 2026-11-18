@@ -1,7 +1,8 @@
 # Handoff: hive-design
 
 - **Goal:** One Swift package with the Hive apps' look, used by HiveMind and HiveScore, so they can't drift apart. Colours come from HiveMind's `integrations/ui/app.css`.
-- **Done:** 2026-11-17 (Gemini 4 Hydrogen) **Fix `PressStyleTests` crash, add `HiveGitHubSignInView` test, tick How-to-use milestone.**
+- **Done:** 2026-11-18 (Claude Opus 5.5, Hive build order #35, Onboard 60) **1.10.0 `HiveSetupView`**: first-launch setup on screen for hive-kit 1.23.0's `HiveSetup`: "Set up <App>" with the app mark, "Step 2 of 3" and a bar, "Welcome back" after an interrupted setup, the current step's reason and what iOS will ask (hand icon) before it asks, the step's button and Not now (optional steps only), an "All set" card with Start using <App>, and every step listed with Done / Not now / Needed / Optional. The app runs each step (`run` returns true when done) and saves progress. Xcode preview "Setup: step 2 of 3, resumed". hive-kit minimum 1.23.0. HiveTempo uses it first.
+- **Done (earlier):** 2026-11-17 (Gemini 4 Hydrogen) **Fix `PressStyleTests` crash, add `HiveGitHubSignInView` test, tick How-to-use milestone.**
   - `Tests/HiveDesignTests/HiveDesignTests.swift`: stopped calling `.body` on `ModifiedContent` in `PressStyleTests` (which trapped under iOS `xcodebuild test`), added `signInViewBuildsInAllStates()`.
   - `PROJECT.md`: ticked the "How to use cards" milestone (all 6 apps shipped it).
 - **Done (earlier):** 2026-11-15 (Gemini 4 Hydrogen, audit Phase 2) **`HiveGitHubSignInView`** (`Sources/HiveDesign/HiveGitHubSignInView.swift`): extracted the shared GitHub device-flow sign-in view used by HiveScore, HiveTempo, and HiveWorld (`swift test` 10/10 passed; iOS Simulator `xcodebuild build` succeeded).
