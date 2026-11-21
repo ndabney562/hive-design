@@ -7,19 +7,16 @@ import SwiftUI
 /// (Noah, 2026-11-21). Over-wide content wraps or is cut at the edge instead. Use it for every vertical page.
 public struct HMScroll<Content: View>: View {
     var content: Content
-    @State private var width: CGFloat?
 
     public init(@ViewBuilder content: () -> Content) { self.content = content() }
 
     public var body: some View {
-        ScrollView(.vertical) {
-            content
-                .frame(width: width)
-        }
-        .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
-        .frame(maxWidth: .infinity)
-        .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { newWidth in
-            if newWidth > 0 { width = newWidth }
+        GeometryReader { geo in
+            ScrollView(.vertical) {
+                content
+                    .frame(width: geo.size.width)
+            }
+            .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
         }
     }
 }
