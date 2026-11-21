@@ -31,7 +31,7 @@ public struct HiveMenuShell<Content: View, Menu: View>: View {
                         .accessibilityHidden(true)
                         .transition(.opacity)
                     menu
-                        .frame(width: Self.width(geo.size.width))
+                        .frame(width: Self.width(geo.size.width), alignment: .leading)
                         .accessibilityAddTraits(.isModal)
                         .accessibilityAction(.escape) { open = false }
                         .transition(.move(edge: .leading))
