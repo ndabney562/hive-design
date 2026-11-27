@@ -136,7 +136,7 @@ struct PressStyleTests {
     @MainActor @Test func pressStyleWrapsARow() {
         let row = Button {} label: { Text("Next") }.buttonStyle(HMPressStyle())
         let _: any View = row
-        #expect(HMPressStyle.afterFlash > 0)
+        #expect(HMPressStyle.hold > .zero)
     }
 
     @MainActor @Test func signInViewBuildsInAllStates() {
@@ -150,20 +150,19 @@ struct PressStyleTests {
             onSignIn: {},
             onCancel: {}
         )
-        let code = DeviceCode(deviceCode: "d", userCode: "ABCD-1234", verificationURI: URL(string: "https://github.com/login/device")!, expiresIn: 900, interval: 5)
-        let waiting = HiveGitHubSignInView(
+        let failed = HiveGitHubSignInView(
             mark: Image(systemName: "hexagon"),
             title: "Sign in",
             subtitle: "Read-only",
             footnote: "Private",
-            code: code,
+            code: nil,
             problem: "Rate limited",
             onSignIn: {},
             onCancel: {},
             onDismiss: {}
         )
         let _: any View = idle
-        let _: any View = waiting
+        let _: any View = failed
     }
 }
 #endif
